@@ -183,10 +183,10 @@ if Module.const_defined?(:Topaz)
   # Topaz aborts when evaluating String#%...
   $stderr.puts "[shim] String#%"
   class String
-    # rubocop:disable Style/OpMethod
     def %(*_args)
       "<String#format unavailable>"
     end
+    # rubocop:enable Style/OpMethod
 
     def unpack(fmt)
       if fmt == "C*"
@@ -195,7 +195,6 @@ if Module.const_defined?(:Topaz)
         raise
       end
     end
-    # rubocop:enable Style/OpMethod
   end
 
   require "ffi"
@@ -239,7 +238,9 @@ end
 
 unless 0.respond_to?(:[]) && -1[0] == 1
   $stderr.puts "[shim] Fixnum#[]"
+  # rubocop:disable Lint/UnifiedInteger
   class Fixnum
+    # rubocop:enable Lint/UnifiedInteger
     def [](i)
       (self >> i) & 1
     end
@@ -248,7 +249,9 @@ end
 
 unless 0.respond_to?(:even?)
   $stderr.puts "[shim] Fixnum#even?"
+  # rubocop:disable Lint/UnifiedInteger
   class Fixnum
+    # rubocop:enable Lint/UnifiedInteger
     def even?
       # rubocop:disable Style/EvenOdd
       self % 2 == 0
@@ -261,7 +264,9 @@ begin
   1.step(3, 2)
 rescue LocalJumpError
   $stderr.puts "[shim] Fixnum#step without block"
+  # rubocop:disable Lint/UnifiedInteger
   class Fixnum
+    # rubocop:enable Lint/UnifiedInteger
     alias step_org step
     def step(*args, &blk)
       if blk
